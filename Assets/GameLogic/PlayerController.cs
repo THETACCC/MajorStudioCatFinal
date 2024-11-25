@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using MoreMountains.Feedbacks;
+using SKCell;
 
 public class PlayerController : MonoBehaviour
 {
@@ -29,8 +30,8 @@ public class PlayerController : MonoBehaviour
     private float dashingspeed = 0f;
     private bool canDash = true;
     private bool isDashing;
-    private float dashingPower = 100f;
-    private float dashingTime = 0.25f;
+    public float dashingPower = 45f;
+    private float dashingTime = 0.2f;
     private float dashingCooldown = 1f;
     public float dashingCooldownRef = 1f;
     [SerializeField] private TrailRenderer tr;
@@ -139,6 +140,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] ParticleSystem jumpvfx2;
     [SerializeField] ParticleSystem damagevfx;
     [SerializeField] ParticleSystem walljumpvfx;
+
+    //Visual Indicate
+    public SKSlider DashSliderLeft;
+    public SKSlider DashSliderRight;
+
     private void Start()
     {
         impluseSrouce = GetComponent<CinemachineImpulseSource>();
@@ -147,7 +153,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-
+        UpdateDashSlider();
         if (istalking)
         {
             current_speed_left = 0f;
@@ -746,4 +752,13 @@ public class PlayerController : MonoBehaviour
         CameraShakeManager.instance.CameraShake(impluseSrouce);
     }
     */
+
+
+    private void UpdateDashSlider()
+    {
+        // Calculate the decimal percentage of bloodCount relative to maxBlood
+        float DashCoolDownRef = (float) DashCoolDown / dashingCooldown;
+        DashSliderLeft.SetValue(DashCoolDownRef);
+        DashSliderRight.SetValue(DashCoolDownRef);
+    }
 }
