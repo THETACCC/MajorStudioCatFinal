@@ -6,6 +6,15 @@ TagManager:
   tags:
   - PointManager
   - Ground
+  - ground
+  - Obstacle
+  - BombPickup
+  - Enemy
+  - ExplosionFX
+  - Bullet
+  - HealthBar
+  - GameManager
+  - HardSurface
   layers:
   - Default
   - TransparentFX

@@ -22,14 +22,14 @@ public class SmallObjects : MonoBehaviour
         {
             // Calculate the speed of the object on collision
             float speed = rb.velocity.magnitude;
-            bool isCriticalHit = false;
+            //bool isCriticalHit = false;
 
             // Award points based on the speed
-            int points = Mathf.RoundToInt(speed * 10); // Adjust multiplier as needed
-            pointManager.myPoints += points;
-            DamagePopup.Create(gameObject.transform.position, points, isCriticalHit);
+            //int points = Mathf.RoundToInt(speed * 10); // Adjust multiplier as needed
+            //pointManager.myPoints += points;
+            //DamagePopup.Create(gameObject.transform.position, points, isCriticalHit);
             // Optional: Log for debugging
-            Debug.Log($"Collision speed: {speed}, Points awarded: {points}");
+            //Debug.Log($"Collision speed: {speed}, Points awarded: {points}");
         }
     }
 }

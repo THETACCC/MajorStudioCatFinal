@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
 {
     public float horizontal = 0f;
     public float acceleration = 5f;
-    private float decceleration = 200f;
+    public float decceleration = 200f;
     public float max_hspeed = 100f;
     public float max_hspeed_dash = 150f;
     public float speed = 2f;
@@ -142,8 +142,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] ParticleSystem walljumpvfx;
 
     //Visual Indicate
-    public SKSlider DashSliderLeft;
-    public SKSlider DashSliderRight;
+    //public SKSlider DashSliderLeft;
+    //public SKSlider DashSliderRight;
 
     private void Start()
     {
@@ -758,7 +758,7 @@ public class PlayerController : MonoBehaviour
     {
         // Calculate the decimal percentage of bloodCount relative to maxBlood
         float DashCoolDownRef = (float) DashCoolDown / dashingCooldown;
-        DashSliderLeft.SetValue(DashCoolDownRef);
-        DashSliderRight.SetValue(DashCoolDownRef);
+        //DashSliderLeft.SetValue(DashCoolDownRef);
+        //DashSliderRight.SetValue(DashCoolDownRef);
     }
 }
