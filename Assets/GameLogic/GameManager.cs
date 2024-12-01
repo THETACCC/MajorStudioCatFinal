@@ -44,4 +44,14 @@ public class GameManager : MonoBehaviour
         TimeRemain += smallObjectTimeAdd;
     }
 
+
+    public void AddTimeMediumObject()
+    {
+        TimeRemain += mediumObjectTimeAdd;
+    }
+
+    public void AddTimeBigObject()
+    {
+        TimeRemain += bigObjectTimeAdd;
+    }
 }

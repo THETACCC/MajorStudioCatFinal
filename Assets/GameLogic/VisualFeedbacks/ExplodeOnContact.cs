@@ -8,7 +8,10 @@ public class ExplodeOnContact : MonoBehaviour
     public float explosionForceThreshold = 2f; // Minimum collision force required to trigger explosion
     public PointManager pointManager;
     public GameManager gameManager;
-
+    public int objectType = 0;
+    //0 = small
+    //1 = medium
+    //2 = large
 
     void Start()
     {
@@ -28,7 +31,18 @@ public class ExplodeOnContact : MonoBehaviour
         if (collisionForce >= explosionForceThreshold)
         {
             //Add Time
-            gameManager.AddTimeSmallObject();
+            if(objectType == 0)
+            {
+                gameManager.AddTimeSmallObject();
+            }
+            else if (objectType == 1)
+            {
+                gameManager.AddTimeMediumObject();
+            }
+            else if (objectType == 2)
+            {
+                gameManager.AddTimeBigObject();
+            }
 
             bool isCriticalHit = false;
             int points = Mathf.RoundToInt(collisionForce * 10); // Adjust multiplier as needed
@@ -50,7 +64,21 @@ public class ExplodeOnContact : MonoBehaviour
     {
         float collisionForce = 20;
         //Add Time
-        gameManager.AddTimeSmallObject();
+        if (objectType == 0)
+        {
+            collisionForce = 20;
+            gameManager.AddTimeSmallObject();
+        }
+        else if (objectType == 1)
+        {
+             collisionForce = 40;
+            gameManager.AddTimeMediumObject();
+        }
+        else if (objectType == 2)
+        {
+             collisionForce = 80;
+            gameManager.AddTimeBigObject();
+        }
 
         bool isCriticalHit = false;
         int points = Mathf.RoundToInt(collisionForce * 10); // Adjust multiplier as needed
