@@ -72,6 +72,7 @@ public class PlayerController : MonoBehaviour
     public float wall_jump_delay = 0.5f;
     public float wall_jump_delay_countdown = 0f;
 
+    private bool isLeavingWall = false;
     private bool iswallsliding;
     private float wallSlidingSpeed = 4f;
     private float wallSliding_MaxHspseed = 3f;
@@ -248,7 +249,7 @@ public class PlayerController : MonoBehaviour
 
             dashingspeed = Mathf.MoveTowards(dashingspeed, 0, decceleration * Time.deltaTime * 2);
 
-            if ((Input.GetKey(KeyCode.D)) && (!Input.GetKey(KeyCode.A)))
+            if ((Input.GetKey(KeyCode.D)) && (!Input.GetKey(KeyCode.A)) && !iswallsliding )
             {
                 current_speed_right += acceleration * Time.deltaTime;
                 rb.velocity = new Vector2(dashingspeed + current_speed_right * current_running_speed + jump_velocity.x + jumpmomemtum / 4, rb.velocity.y);
@@ -259,7 +260,7 @@ public class PlayerController : MonoBehaviour
                 current_speed_right = Mathf.MoveTowards(current_speed_right, 0, decceleration * Time.deltaTime);
             }
 
-            if ((Input.GetKey(KeyCode.A)) && (!Input.GetKey(KeyCode.D)))
+            if ((Input.GetKey(KeyCode.A)) && (!Input.GetKey(KeyCode.D)) && !iswallsliding)
             {
                 current_speed_left += acceleration * Time.deltaTime;
                 rb.velocity = new Vector2(dashingspeed + -current_speed_left * current_running_speed + jump_velocity.x + jumpmomemtum / 4, rb.velocity.y);
@@ -269,8 +270,30 @@ public class PlayerController : MonoBehaviour
                 current_speed_left = Mathf.MoveTowards(current_speed_left, 0, decceleration * Time.deltaTime);
             }
         }
+        //Wall Stuff
+        if(iswallsliding)
+        {
+            // Allow movement to leave the wall
+            if (Input.GetKey(KeyCode.A) && IsWalled() && isFacingRight)
+            {
+                rb.velocity = new Vector2(transform.localScale.x * -wall_jumping_power, rb.velocity.y); // Move off the wall to the right
+                Debug.Log("Go off wall left");
+                isLeavingWall = true;
+                //iswallsliding = false; // Exit wall sliding state
+            }
+            else if (Input.GetKey(KeyCode.D) && IsWalled() && !isFacingRight)
+            {
+                rb.velocity = new Vector2(transform.localScale.x * -wall_jumping_power, rb.velocity.y); // Move off the wall to the left
+                Debug.Log("Go off wall right");
+                isLeavingWall = true;
+                //iswallsliding = false; // Exit wall sliding state
+            }
 
-
+        }
+        else
+        {
+            isLeavingWall = false;
+        }
 
 
         //Dashing
@@ -480,45 +503,71 @@ public class PlayerController : MonoBehaviour
 
     private bool IsWalled_Left()
     {
-        return Physics2D.OverlapCircle(wallCheck_left.position, 0f, groundLayer);
+        //return Physics2D.OverlapCircle(wallCheck_left.position, 0f, groundLayer);
+        Collider2D collider = wallCheck.GetComponent<Collider2D>();
+        if (collider != null)
+        {
+            return collider.IsTouchingLayers(groundLayer);
+        }
+        return false;
     }
 
 
     private void Wallslide()
     {
-        if ((IsWalled() && !IsGrounded() && !Input.GetButtonDown("Jump") && !IsWalled_Left()))
+        if ((IsWalled() || IsWalled_Left()) && !IsGrounded() && !isWallJumping && !isLeavingWall)
         {
             iswallsliding = true;
-            /*
-            if (iswallsliding && !momemtumreset)
-            {
-                current_speed_left = 0;
-                current_speed_right = 0;
-                momemtumreset = true;
-            }
-            */
-            rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, -wallSlidingSpeed, float.MaxValue));
-            //rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y);
+            Debug.Log("wallsliding");
+            Debug.Log(iswallsliding);
+            // Limit vertical speed for wall sliding
+            rb.velocity = new Vector2(0, Mathf.Clamp(rb.velocity.y, -wallSlidingSpeed, float.MaxValue));
 
-        }
-        else if ((IsWalled_Left() && !IsGrounded() && !Input.GetButtonDown("Jump") && !IsWalled()))
-        {
-            iswallsliding = true;
-            /*
-            if (iswallsliding && !momemtumreset)
-            {
-                current_speed_left = 0;
-                current_speed_right = 0;
-                momemtumreset = true;
-            }
-            */
-            rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, -wallSlidingSpeed, float.MaxValue));
+
+
         }
         else
         {
             iswallsliding = false;
             momemtumreset = false;
         }
+
+        /*
+           if ((IsWalled() && !IsGrounded() && !Input.GetButtonDown("Jump") && !IsWalled_Left()))
+           {
+               iswallsliding = true;
+
+               if (iswallsliding && !momemtumreset)
+               {
+                   current_speed_left = 0;
+                   current_speed_right = 0;
+                   momemtumreset = true;
+               }
+
+               rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, -wallSlidingSpeed, float.MaxValue));
+               //rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y);
+
+           }
+           else if ((IsWalled_Left() && !IsGrounded() && !Input.GetButtonDown("Jump") && !IsWalled()))
+           {
+               iswallsliding = true;
+
+               if (iswallsliding && !momemtumreset)
+               {
+                   current_speed_left = 0;
+                   current_speed_right = 0;
+                   momemtumreset = true;
+               }
+
+               rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, -wallSlidingSpeed, float.MaxValue));
+           }
+           else
+           {
+               iswallsliding = false;
+               momemtumreset = false;
+           }
+         */
+
     }
 
     private void FixedUpdate()
