@@ -34,8 +34,9 @@ public class PlayerController : MonoBehaviour
     private float dashingTime = 0.2f;
     private float dashingCooldown = 1f;
     public float dashingCooldownRef = 1f;
+    private Vector2 dashDirection;
     [SerializeField] private TrailRenderer tr;
-
+    [SerializeField] private TrailRenderer tr2;
 
     [SerializeField] private bool isFacingRight = true;
 
@@ -148,6 +149,8 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        tr.emitting = false;
+        tr2.emitting = false;
         impluseSrouce = GetComponent<CinemachineImpulseSource>();
         wall_jump_delay_countdown = wall_jump_delay;
     }
@@ -376,6 +379,12 @@ public class PlayerController : MonoBehaviour
         }
 
 
+        // Dash towards mouse position on left click
+        if (Input.GetMouseButton(0) && DashCoolDown >= 1f)
+        {
+            DashToMousePosition();
+        }
+
         current_running_speed = 1.1f;
         horizontal = rb.velocity.x;
 
@@ -419,6 +428,64 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void DashToMousePosition()
+    {
+        if (isDashing || DashCoolDown < 1f) return;
+
+        // Calculate the direction to the mouse position
+        Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mouseWorldPosition.z = 0; // Ensure 2D compatibility
+        dashDirection = (mouseWorldPosition - transform.position).normalized; // Normalize the vector for uniform speed
+
+        // Start the dash
+        DashCoolDown = 0f; // Reset cooldown
+        dashFeedBack?.PlayFeedbacks(); // Play dash feedbacks
+        StartCoroutine(DashTowardsMouse());
+    }
+
+    private IEnumerator DashTowardsMouse()
+    {
+        canDash = false;
+        isDashing = true;
+
+        // Disable gravity and apply dash velocity
+        float originalGravity = rb.gravityScale;
+       // rb.gravityScale = 0f;
+
+        // Apply the dash velocity using normalized direction scaled by dashingPower
+        rb.velocity = dashDirection * dashingPower;
+
+        // Visual and animation effects
+        tr2.emitting = true;
+        spriteRenderer.color = new UnityEngine.Color(0, 0, 0, 1);
+
+        if (!IsGrounded())
+        {
+            animator.SetBool("IsDashingAir", true);
+        }
+        else
+        {
+            animator.SetBool("IsDashing", true);
+        }
+
+        yield return new WaitForSeconds(dashingTime);
+
+        // Reset after dash
+        animator.SetBool("IsDashingAir", false);
+        animator.SetBool("IsDashing", false);
+        tr2.emitting = false;
+        rb.gravityScale = originalGravity;
+        isDashing = false;
+
+        // Stop velocity after dash
+        //rb.velocity = Vector2.zero;
+
+        spriteRenderer.color = new UnityEngine.Color(1, 1, 1, 1);
+        yield return new WaitForSeconds(dashingCooldown);
+
+        dashReadyFeedBack?.PlayFeedbacks();
+        canDash = true;
+    }
 
     public void talking()
     {
@@ -496,7 +563,7 @@ public class PlayerController : MonoBehaviour
         Collider2D collider = wallCheck.GetComponent<Collider2D>();
         if (collider != null)
         {
-            return collider.IsTouchingLayers(groundLayer);
+            return collider.IsTouchingLayers(wallLayer);
         }
         return false;
     }
@@ -507,7 +574,7 @@ public class PlayerController : MonoBehaviour
         Collider2D collider = wallCheck.GetComponent<Collider2D>();
         if (collider != null)
         {
-            return collider.IsTouchingLayers(groundLayer);
+            return collider.IsTouchingLayers(wallLayer);
         }
         return false;
     }

@@ -46,7 +46,8 @@ public class ExplodeOnContact : MonoBehaviour
 
             bool isCriticalHit = false;
             int points = Mathf.RoundToInt(collisionForce * 10); // Adjust multiplier as needed
-            pointManager.myPoints += points;
+            pointManager.AddPoints(points);
+            pointManager.ComboMeter();
             DamagePopup.Create(gameObject.transform.position, points, isCriticalHit);
             // Trigger explosion
             _explodable.explode(collision.transform.position, collision.relativeVelocity.magnitude*0.1f);
@@ -82,7 +83,8 @@ public class ExplodeOnContact : MonoBehaviour
 
         bool isCriticalHit = false;
         int points = Mathf.RoundToInt(collisionForce * 10); // Adjust multiplier as needed
-        pointManager.myPoints += points;
+        pointManager.AddPoints(points);
+        pointManager.ComboMeter();
         DamagePopup.Create(gameObject.transform.position, points, isCriticalHit);
         // Trigger explosion
         _explodable.explode(transform.position,1f);
