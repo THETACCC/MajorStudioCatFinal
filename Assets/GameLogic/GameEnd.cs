@@ -21,7 +21,7 @@ public class GameEnd : MonoBehaviour
         {
             int pointsToKeep = pointManager.myPoints;
             StaticData.Score = pointsToKeep;
-            SceneManager.LoadScene(1);
+            SceneManager.LoadScene(2);
         }
     }
 }

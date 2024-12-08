@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour
     private bool canDash = true;
     private bool isDashing;
     public float dashingPower = 45f;
-    private float dashingTime = 0.2f;
+    private float dashingTime = 0.3f;
     private float dashingCooldown = 1f;
     public float dashingCooldownRef = 1f;
     private Vector2 dashDirection;
@@ -176,15 +176,15 @@ public class PlayerController : MonoBehaviour
             {
                 isinvisible = false;
                 invisibletime = 0f;
-                SetCollisionWithLayer(8, true);
-                StopCoroutine(BlinkSprite()); // Stop blinking when no longer invisible
-                SetSpriteAlpha(1f);
+                //SetCollisionWithLayer(8, true);
+                //StopCoroutine(BlinkSprite()); // Stop blinking when no longer invisible
+                //SetSpriteAlpha(1f);
 
             }
             else
             {
-                StartCoroutine(BlinkSprite());
-                SetCollisionWithLayer(8, false);
+                //StartCoroutine(BlinkSprite());
+                //SetCollisionWithLayer(8, false);
             }
         }
 
@@ -477,17 +477,12 @@ public class PlayerController : MonoBehaviour
 
         // Visual and animation effects
         tr2.emitting = true;
-        spriteRenderer.color = new UnityEngine.Color(0, 0, 0, 1);
+        //spriteRenderer.color = new UnityEngine.Color(0, 0, 0, 1);
 
-        if (!IsGrounded())
-        {
-            animator.SetBool("IsDashingAir", true);
-        }
-        else
-        {
+
             animator.SetBool("IsDashing", true);
-        }
-
+        animator.SetBool("IsDashingAir", true);
+        animator.SetTrigger("Dash");
         yield return new WaitForSeconds(dashingTime);
 
         // Reset after dash
@@ -500,7 +495,7 @@ public class PlayerController : MonoBehaviour
         // Stop velocity after dash
         //rb.velocity = Vector2.zero;
 
-        spriteRenderer.color = new UnityEngine.Color(1, 1, 1, 1);
+        //spriteRenderer.color = new UnityEngine.Color(1, 1, 1, 1);
         yield return new WaitForSeconds(dashingCooldown);
 
         dashReadyFeedBack?.PlayFeedbacks();
@@ -817,21 +812,15 @@ public class PlayerController : MonoBehaviour
         isDashing = true;
         float originalGravity = rb.gravityScale;
         rb.gravityScale = 0f;
-        rb.velocity = new Vector2(DashDirection * dashingPower * current_running_speed, 0f);
+        rb.velocity = new Vector2(DashDirection * dashingPower * current_running_speed * 1.15f, 0f);
         dashingspeed = rb.velocity.x;
         tr.emitting = true;
-        spriteRenderer.color = new UnityEngine.Color(0, 0, 0, 1);
-        Debug.Log($"IsGrounded: {IsGrounded()}");
-        if (!IsGrounded())
-        {
-            Debug.Log("Triggering Air Dash Animation");
+        //spriteRenderer.color = new UnityEngine.Color(0, 0, 0, 1);
+
             animator.SetBool("IsDashingAir", true);
-        }
-        else
-        {
-            Debug.Log("Triggering Ground Dash Animation");
-            animator.SetBool("IsDashing", true);
-        }
+        animator.SetTrigger("Dash");
+        animator.SetBool("IsDashing", true);
+
 
         yield return new WaitForSeconds(dashingTime);
         animator.SetBool("IsDashingAir", false);
@@ -841,7 +830,7 @@ public class PlayerController : MonoBehaviour
         isDashing = false;
         StartCoroutine(SmoothTransitionToMaxSpeed());
         dashingCooldownRef = 0f;
-        spriteRenderer.color = new UnityEngine.Color(1, 1, 1, 1);
+        //spriteRenderer.color = new UnityEngine.Color(1, 1, 1, 1);
         yield return new WaitForSeconds(dashingCooldown);
         dashReadyFeedBack?.PlayFeedbacks();
         canDash = true;

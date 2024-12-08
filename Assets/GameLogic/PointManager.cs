@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using TMPro;
 using SKCell;
+using MoreMountains.Feedbacks;
 
 public class PointManager : MonoBehaviour
 {
@@ -23,9 +24,12 @@ public class PointManager : MonoBehaviour
     private int comboTriggerCount; // Number of times ComboMeter is called during a combo
 
     private readonly int[] triggerThresholds = { 0, 2, 4, 8, 16 }; // Thresholds for each rank
-
+    public MMFeedbacks Rank;
+    public MMFeedbacks Rank2;
+    public MMFeedbacks Points;
     void Start()
     {
+
         ResetCombo();
     }
 
@@ -54,6 +58,7 @@ public class PointManager : MonoBehaviour
     public void AddPoints(int points)
     {
         AudioManager.Instance.PlaySFX("AddPoints");
+        Points?.PlayFeedbacks();
         if (isComboActive)
         {
             int multiplier = (int)Mathf.Pow(2, currentRankIndex); // Multiplier increases with rank
@@ -94,6 +99,7 @@ public class PointManager : MonoBehaviour
 
     private void DecreaseComboRank()
     {
+        //AudioManager.Instance.PlaySFX("Rankdown");
         // Decrease the rank by one if above F rank
         if (currentRankIndex > 0)
         {
@@ -130,6 +136,8 @@ public class PointManager : MonoBehaviour
         {
             if (comboTriggerCount >= triggerThresholds[i])
             {
+                Rank?.PlayFeedbacks();
+                Rank2?.PlayFeedbacks();
                 currentRankIndex = i;
                 break;
             }
@@ -144,6 +152,7 @@ public class PointManager : MonoBehaviour
         switch (currentRankIndex)
         {
             case 4: // S rank
+
                 comboDuration = 2f;
                 break;
             case 3: // A rank
