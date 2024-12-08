@@ -333,9 +333,11 @@ GameObject:
   - component: {fileID: 6189822213942746876}
   - component: {fileID: 1616014521252119503}
   - component: {fileID: 4884452400934154223}
+  - component: {fileID: 8584735540386012689}
   - component: {fileID: 1732900289921548820}
   - component: {fileID: 5866155612859341399}
   - component: {fileID: 8141646122604859231}
+  - component: {fileID: 8577781890080428689}
   m_Layer: 6
   m_Name: WaterBottle
   m_TagString: Untagged
@@ -475,6 +477,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.10449982, y: 0.2518157}
   m_EdgeRadius: 0
+--- !u!114 &8584735540386012689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6796619670540439554}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90d3026fbf00b464fb57fb105a974490, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!50 &1732900289921548820
 Rigidbody2D:
   serializedVersion: 4
@@ -543,6 +557,60 @@ MonoBehaviour:
   explosionForceThreshold: 20
   pointManager: {fileID: 0}
   gameManager: {fileID: 0}
+  objectType: 0
+--- !u!114 &8577781890080428689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6796619670540439554}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ImpulseDefinition:
+    m_ImpulseChannel: 1
+    m_ImpulseShape: 3
+    m_CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_ImpulseDuration: 0.2
+    m_ImpulseType: 0
+    m_DissipationRate: 0.25
+    m_RawSignal: {fileID: 0}
+    m_AmplitudeGain: 1
+    m_FrequencyGain: 1
+    m_RepeatMode: 0
+    m_Randomize: 1
+    m_TimeEnvelope:
+      m_AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_AttackTime: 0
+      m_SustainTime: 0.2
+      m_DecayTime: 0.7
+      m_ScaleWithImpact: 1
+      m_HoldForever: 0
+    m_ImpactRadius: 100
+    m_DirectionMode: 0
+    m_DissipationMode: 2
+    m_DissipationDistance: 100
+    m_PropagationSpeed: 343
+  m_DefaultVelocity: {x: -0.2, y: -0.1, z: 0}
 --- !u!1 &7548706472425805376
 GameObject:
   m_ObjectHideFlags: 0

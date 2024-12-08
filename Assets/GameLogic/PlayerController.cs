@@ -314,6 +314,11 @@ public class PlayerController : MonoBehaviour
                     dashFeedBack?.PlayFeedbacks();
                     StartCoroutine(Dash());
                     isinvisible = true;
+
+                    //Audio
+                    AudioManager.Instance.PlaySFX("CatDash");
+                    AudioManager.Instance.PlaySFX("CatMeow1");
+
                 }
 
             }
@@ -340,6 +345,10 @@ public class PlayerController : MonoBehaviour
                     DashCoolDown = 0f;
                     dashFeedBack?.PlayFeedbacks();
                     StartCoroutine(Dash());
+
+                    //Audio
+                    AudioManager.Instance.PlaySFX("CatDash");
+                    AudioManager.Instance.PlaySFX("CatMeow1");
                 }
             }
             else
@@ -364,6 +373,10 @@ public class PlayerController : MonoBehaviour
                 DashCoolDown = 0f;
                 dashFeedBack?.PlayFeedbacks();
                 StartCoroutine(Dash());
+
+                //Audio
+                AudioManager.Instance.PlaySFX("CatDash");
+                AudioManager.Instance.PlaySFX("CatMeow1");
             }
         }
         else if (Input.GetKey(KeyCode.LeftShift) && isFacingRight && DashCoolDown >= 1f)
@@ -375,6 +388,10 @@ public class PlayerController : MonoBehaviour
                 DashCoolDown = 0f;
                 dashFeedBack?.PlayFeedbacks();
                 StartCoroutine(Dash());
+
+                //Audio
+                AudioManager.Instance.PlaySFX("CatDash");
+                AudioManager.Instance.PlaySFX("CatMeow1");
             }
         }
 
@@ -382,6 +399,9 @@ public class PlayerController : MonoBehaviour
         // Dash towards mouse position on left click
         if (Input.GetMouseButton(0) && DashCoolDown >= 1f)
         {
+            //Audio
+            AudioManager.Instance.PlaySFX("CatDash");
+            AudioManager.Instance.PlaySFX("CatMeow2");
             DashToMousePosition();
         }
 
@@ -505,10 +525,13 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetButtonDown("Jump") && IsGrounded() && !iswallsliding)
         {
+            //Audio
+            AudioManager.Instance.PlaySFX("CatJump");
+            AudioManager.Instance.PlaySFX("CatPurr2");
             //Disabled VFX
-            //jumpvfx.Play();
+            jumpvfx.Play();
             //jumpvfx2.Play();
-            //jumpFeedBack?.PlayFeedbacks();
+            jumpFeedBack?.PlayFeedbacks();
             rb.velocity = new Vector2(rb.velocity.x, jump_power);
             jumpmomemtum = rb.velocity.x;
             start_counting = true;
@@ -526,26 +549,31 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("Jump") && !IsGrounded() && !iswallsliding && !isWallJumping && !doublejump && (jump_reset <= 0))
         {
             //Disabled VFX
-            //jumpFeedBack?.PlayFeedbacks();
-            //jumpvfx.Play();
+            jumpFeedBack?.PlayFeedbacks();
+            jumpvfx.Play();
             //jumpvfx2.Play();
             jumpmomemtum = rb.velocity.x;
             doublejump = true;
             rb.velocity = new Vector2(rb.velocity.x, jump_power);
             start_counting_triple = true;
             jump_reset_triple = jump_reset_timer_triple;
+            //Audio
+            AudioManager.Instance.PlaySFX("CatJump");
+            AudioManager.Instance.PlaySFX("CatPurr2");
 
         }
         if (Input.GetButtonDown("Jump") && !IsGrounded() && !iswallsliding && !triplejump && !isWallJumping && (jump_reset_triple <= 0))
         {
             //Disabled VFX
-            //jumpFeedBack?.PlayFeedbacks();
-            //jumpvfx.Play();
+            jumpFeedBack?.PlayFeedbacks();
+            jumpvfx.Play();
             //jumpvfx2.Play();
             jumpmomemtum = rb.velocity.x;
             triplejump = true;
             rb.velocity = new Vector2(rb.velocity.x, jump_power);
-
+            //Audio
+            AudioManager.Instance.PlaySFX("CatJump");
+            AudioManager.Instance.PlaySFX("CatPurr1");
         }
 
 
@@ -699,6 +727,8 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetButtonDown("Jump") && wallJumpingCounter > 0f)
         {
+            //Audio
+            AudioManager.Instance.PlaySFX("CatJump");
 
             //wall_jumping_power = 20f;
             isWallJumping = true;

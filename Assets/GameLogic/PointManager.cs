@@ -53,6 +53,7 @@ public class PointManager : MonoBehaviour
 
     public void AddPoints(int points)
     {
+        AudioManager.Instance.PlaySFX("AddPoints");
         if (isComboActive)
         {
             int multiplier = (int)Mathf.Pow(2, currentRankIndex); // Multiplier increases with rank
